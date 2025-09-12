@@ -78,7 +78,9 @@ tags:instruction
 
 > **点击开始学习吧！**
 >
-> [<kbd>数据结构</kbd>](https://ds.tynote.cn/数据结构.html)[<kbd>数据结构综合题</kbd>](https://ds-e.tynote.cn/数据结构综合题.html)
+> [<kbd>数据结构</kbd>](https://ds.tynote.cn/DataStructure.html)[<kbd>数据结构综合题</kbd>](https://ds-e.tynote.cn/DS-Exercises.html)[<kbd>操作系统</kbd>](https://os.tynote.cn/OperatingSystems.html)[<kbd>计算机组成原理</kbd>](https://cs.tynote.cn/ComputerOrganization.html)[<kbd>计算机网络</kbd>](https://cn.tynote.cn/ComputerNetwork.html)
+
+
 
 # 购买后如何使用
 
