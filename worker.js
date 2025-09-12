@@ -9,7 +9,7 @@ var worker_default = {
     }
 
     // 去掉开头的 "/" 并加上 instruction/ 前缀
-    const key = "CS/" + (path.startsWith("/") ? path.slice(1) : path);
+    const key = "instruction/" + (path.startsWith("/") ? path.slice(1) : path);
 
     try {
       const object = await env.MY_BUCKET.get(key);
