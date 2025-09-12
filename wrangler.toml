@@ -1,0 +1,7 @@
+name = "instruction-site"
+main = "worker.js"
+compatibility_date = "2025-09-12"
+
+[[r2_buckets]]
+binding = "MY_BUCKET"          # 代码里用到的名字
+bucket_name = "cn-site"        # 你创建的 R2 存储桶名
