@@ -19,16 +19,24 @@ var worker_default = {
 
       // 设置 Content-Type
       let contentType;
+      let extraHeaders = {};
+
       if (key.endsWith(".html")) {
         contentType = "text/html;charset=UTF-8";
       } else if (key.endsWith(".md")) {
-        contentType = "text/markdown;charset=UTF-8"; // 方法一：直接显示 Markdown
+        contentType = "text/markdown;charset=UTF-8"; // Markdown 直接显示
+      } else if (key.endsWith(".pdf")) {
+        contentType = "application/pdf";
+        extraHeaders["Content-Disposition"] = "inline"; // 允许在浏览器中直接打开 PDF
       } else {
         contentType = "application/octet-stream";
       }
 
       return new Response(object.body, {
-        headers: { "content-type": contentType }
+        headers: {
+          "content-type": contentType,
+          ...extraHeaders
+        }
       });
     } catch (err) {
       return new Response("Error: " + err.message, { status: 500 });
