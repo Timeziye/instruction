@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -60,8 +60,42 @@ function collectFiles(dir) {
   return files;
 }
 
-const files = collectFiles(root);
-console.log(`Syncing ${files.length} files to remote r2://${bucket}/${prefix}/`);
+function runGit(args) {
+  return spawnSync("git", args, { cwd: root, encoding: "utf8" });
+}
+
+function filesChangedInCurrentCommit() {
+  const diff = runGit(["diff-tree", "--no-commit-id", "--name-only", "-r", "--diff-filter=ACMRT", "HEAD"]);
+  if (diff.status !== 0) return null;
+
+  const files = diff.stdout
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((relativePath) => path.resolve(root, relativePath))
+    .filter((absolutePath) => {
+      if (!existsSync(absolutePath)) return false;
+      if (!statSync(absolutePath).isFile()) return false;
+      return !shouldSkip(path.relative(root, absolutePath));
+    });
+
+  return files;
+}
+
+const changedFiles = filesChangedInCurrentCommit();
+const files = changedFiles === null ? collectFiles(root) : changedFiles;
+
+if (changedFiles === null) {
+  console.log("Git diff unavailable; syncing all content files.");
+} else {
+  console.log(`Git diff found ${files.length} changed content file(s) to sync.`);
+}
+
+if (files.length === 0) {
+  console.log("No changed content files to sync. R2 sync skipped.");
+} else {
+  console.log(`Syncing ${files.length} file(s) to remote r2://${bucket}/${prefix}/`);
+}
 
 for (const file of files) {
   const relativePath = path.relative(root, file).split(path.sep).join("/");
