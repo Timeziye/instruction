@@ -61,7 +61,7 @@ function collectFiles(dir) {
 }
 
 const files = collectFiles(root);
-console.log(`Syncing ${files.length} files to r2://${bucket}/${prefix}/`);
+console.log(`Syncing ${files.length} files to remote r2://${bucket}/${prefix}/`);
 
 for (const file of files) {
   const relativePath = path.relative(root, file).split(path.sep).join("/");
@@ -70,7 +70,7 @@ for (const file of files) {
 
   const result = spawnSync(
     npx,
-    ["--yes", "wrangler", "r2", "object", "put", `${bucket}/${objectKey}`, "--file", file],
+    ["--yes", "wrangler", "r2", "object", "put", `${bucket}/${objectKey}`, "--file", file, "--remote"],
     { cwd: root, stdio: "inherit" },
   );
 
